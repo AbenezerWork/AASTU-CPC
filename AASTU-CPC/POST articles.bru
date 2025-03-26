@@ -1,0 +1,22 @@
+meta {
+  name: POST articles
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseURL}}/articlesedit
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: session-name=67a74a4ec64c35d621662601
+}
+
+body:json {
+  {
+    "author": "Abenezer",
+    "Title": "checking auth"
+  }
+}
