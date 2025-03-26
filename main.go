@@ -4,20 +4,34 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/AbenezerWork/AASTU-CPC/controllers"
 	"github.com/AbenezerWork/AASTU-CPC/models"
 	"github.com/AbenezerWork/AASTU-CPC/repository"
 	"github.com/AbenezerWork/AASTU-CPC/routers"
 	"github.com/AbenezerWork/AASTU-CPC/utils"
+	"github.com/joho/godotenv"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func main() {
+	// Load environment variables from .env file
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	// Get MongoDB URI from environment variables
+	mongoURI := os.Getenv("MONGO_URI")
+	if mongoURI == "" {
+		log.Fatal("MONGO_URI not set in environment variables")
+	}
+
 	// Set client options
-	clientOptions := options.Client().ApplyURI("mongodb+srv://admin:037005@myatlasclusteredu.tknszig.mongodb.net/?retryWrites=true&w=majority&appName=myAtlasClusterEDU")
+	clientOptions := options.Client().ApplyURI(mongoURI)
 
 	// Connect to MongoDB
 	client, err := mongo.Connect(context.Background(), clientOptions)
