@@ -10,14 +10,25 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+// ProblemController handles HTTP requests related to problems.
 type ProblemController struct {
 	Repo *repository.ProblemRepository
 }
 
+// NewProblemController initializes a new ProblemController.
 func NewProblemController(repo *repository.ProblemRepository) *ProblemController {
 	return &ProblemController{Repo: repo}
 }
 
+// CreateProblem handles POST /problems
+// @Summary Create a new problem
+// @Description Create a new problem in the database
+// @Tags Problems
+// @Accept json
+// @Produce json
+// @Param problem body models.Problem true "Problem data"
+// @Success 200 {object} models.Problem
+// @Router /problems [post]
 func (ctrl *ProblemController) CreateProblem(c *gin.Context) {
 
 	var problem models.Problem
@@ -33,6 +44,14 @@ func (ctrl *ProblemController) CreateProblem(c *gin.Context) {
 	c.JSON(http.StatusOK, createdProblem)
 }
 
+// GetProblemByID handles GET /problems/:id
+// @Summary Get a problem by ID
+// @Description Retrieve a problem by its ID
+// @Tags Problems
+// @Produce json
+// @Param id path string true "Problem ID"
+// @Success 200 {object} models.Problem
+// @Router /problems/{id} [get]
 func (ctrl *ProblemController) GetProblemByID(c *gin.Context) {
 	session := c.MustGet("session").(models.Session)
 	if session.UserID == primitive.NilObjectID {
@@ -49,6 +68,16 @@ func (ctrl *ProblemController) GetProblemByID(c *gin.Context) {
 	c.JSON(http.StatusOK, problem)
 }
 
+// UpdateProblem handles PUT /problems/:id
+// @Summary Update a problem
+// @Description Update an existing problem by its ID
+// @Tags Problems
+// @Accept json
+// @Produce json
+// @Param id path string true "Problem ID"
+// @Param problem body models.Problem true "Updated problem data"
+// @Success 200 {object} models.Problem
+// @Router /problems/{id} [put]
 func (ctrl *ProblemController) UpdateProblem(c *gin.Context) {
 	session := c.MustGet("session").(models.Session)
 	if session.UserID == primitive.NilObjectID {
@@ -74,6 +103,13 @@ func (ctrl *ProblemController) UpdateProblem(c *gin.Context) {
 	c.JSON(http.StatusOK, problem)
 }
 
+// DeleteProblem handles DELETE /problems/:id
+// @Summary Delete a problem
+// @Description Delete a problem by its ID
+// @Tags Problems
+// @Produce json
+// @Param id path string true "Problem ID"
+// @Router /problems/{id} [delete]
 func (ctrl *ProblemController) DeleteProblem(c *gin.Context) {
 	session := c.MustGet("session").(models.Session)
 	if session.UserID == primitive.NilObjectID {

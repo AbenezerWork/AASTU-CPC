@@ -1,0 +1,412 @@
+basePath: /
+definitions:
+  models.Article:
+    properties:
+      author:
+        type: string
+      blog:
+        type: string
+      division:
+        type: string
+      id:
+        type: string
+      problems:
+        items:
+          $ref: '#/definitions/models.Problem'
+        type: array
+      tags:
+        items:
+          type: string
+        type: array
+      title:
+        type: string
+    type: object
+  models.Credentials:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  models.Mentor:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      tel:
+        type: string
+    type: object
+  models.Problem:
+    properties:
+      author:
+        type: string
+      contest_id:
+        type: string
+      difficulty:
+        type: string
+      id:
+        type: string
+      index:
+        type: string
+      problem_statement:
+        type: string
+      source:
+        type: string
+      tags:
+        items:
+          type: string
+        type: array
+      title:
+        type: string
+    type: object
+  models.Submission:
+    properties:
+      id:
+        type: string
+      problem_id:
+        type: string
+      submission:
+        type: string
+      user_id:
+        type: string
+    type: object
+  models.User:
+    properties:
+      codeforces_username:
+        type: string
+      id:
+        type: string
+      mentor:
+        $ref: '#/definitions/models.Mentor'
+      password:
+        type: string
+      role:
+        type: string
+      score:
+        type: integer
+      user_name:
+        type: string
+    required:
+    - codeforces_username
+    - password
+    - user_name
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server todo server. You can visit the GitHub repository
+    at https://github.com/LordGhostX/swag-gin-demo
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  title: Go + Gin Todo API
+  version: "1.0"
+paths:
+  /articles/{id}:
+    get:
+      description: Retrieve a single article by its ID
+      parameters:
+      - description: Article ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Article'
+      summary: Get an article by ID
+      tags:
+      - articles
+  /articlesedit:
+    post:
+      consumes:
+      - application/json
+      description: Create a new article with the provided JSON body
+      parameters:
+      - description: Article to create
+        in: body
+        name: article
+        required: true
+        schema:
+          $ref: '#/definitions/models.Article'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Article'
+      summary: Create a new article
+      tags:
+      - articles
+  /articlesedit/{id}:
+    delete:
+      description: Delete an article by its ID
+      parameters:
+      - description: Article ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Delete an article
+      tags:
+      - articles
+    put:
+      consumes:
+      - application/json
+      description: Update an existing article by its ID
+      parameters:
+      - description: Article ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated article data
+        in: body
+        name: article
+        required: true
+        schema:
+          $ref: '#/definitions/models.Article'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Article'
+      summary: Update an article
+      tags:
+      - articles
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate a user and create a session
+      parameters:
+      - description: Login credentials
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/models.Credentials'
+      produces:
+      - application/json
+      responses: {}
+      summary: Login a user
+      tags:
+      - auth
+  /auth/logout:
+    post:
+      description: End the user's session
+      produces:
+      - application/json
+      responses: {}
+      summary: Logout a user
+      tags:
+      - auth
+  /auth/signup:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user account
+      parameters:
+      - description: User details
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses: {}
+      summary: Signup a new user
+      tags:
+      - auth
+  /problems:
+    post:
+      consumes:
+      - application/json
+      description: Create a new problem in the database
+      parameters:
+      - description: Problem data
+        in: body
+        name: problem
+        required: true
+        schema:
+          $ref: '#/definitions/models.Problem'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Problem'
+      summary: Create a new problem
+      tags:
+      - Problems
+  /problems/{id}:
+    delete:
+      description: Delete a problem by its ID
+      parameters:
+      - description: Problem ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Delete a problem
+      tags:
+      - Problems
+    get:
+      description: Retrieve a problem by its ID
+      parameters:
+      - description: Problem ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Problem'
+      summary: Get a problem by ID
+      tags:
+      - Problems
+    put:
+      consumes:
+      - application/json
+      description: Update an existing problem by its ID
+      parameters:
+      - description: Problem ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated problem data
+        in: body
+        name: problem
+        required: true
+        schema:
+          $ref: '#/definitions/models.Problem'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Problem'
+      summary: Update a problem
+      tags:
+      - Problems
+  /submissions/validate:
+    post:
+      consumes:
+      - application/json
+      description: Validate a user's submission for a problem
+      parameters:
+      - description: Submission data
+        in: body
+        name: submission
+        required: true
+        schema:
+          $ref: '#/definitions/models.Submission'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Submission'
+      summary: Validate a submission
+      tags:
+      - Submissions
+  /users:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user with the provided JSON body
+      parameters:
+      - description: User details
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses: {}
+      summary: Create a new user
+      tags:
+      - users
+  /users/{id}:
+    delete:
+      description: Delete a user by their ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Delete a user
+      tags:
+      - users
+    get:
+      description: Retrieve a user by their ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      summary: Get a user by ID
+      tags:
+      - users
+    put:
+      consumes:
+      - application/json
+      description: Update an existing user's details
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated user details
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses: {}
+      summary: Update a user
+      tags:
+      - users
+swagger: "2.0"

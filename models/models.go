@@ -8,6 +8,11 @@ type Mentor struct {
 	Email string `bson:"email" json:"email"`
 }
 
+type Credentials struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
 type User struct {
 	ID                 primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
 	Score              int64              `bson:"score" json:"score"`

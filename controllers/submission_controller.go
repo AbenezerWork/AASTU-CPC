@@ -10,12 +10,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// SubmissionController handles HTTP requests related to submissions.
 type SubmissionController struct {
 	Subrepo  *repository.SubmissionRepository
 	Probrepo *repository.ProblemRepository
 	Userrepo *repository.UserRepository
 }
 
+// NewSubmissionController initializes a new SubmissionController.
 func NewSubmissionController(sr *repository.SubmissionRepository, pr *repository.ProblemRepository, ur *repository.UserRepository) *SubmissionController {
 	return &SubmissionController{
 		Subrepo:  sr,
@@ -24,6 +26,15 @@ func NewSubmissionController(sr *repository.SubmissionRepository, pr *repository
 	}
 }
 
+// ValidateSubmission handles POST /submissions/validate
+// @Summary Validate a submission
+// @Description Validate a user's submission for a problem
+// @Tags Submissions
+// @Accept json
+// @Produce json
+// @Param submission body models.Submission true "Submission data"
+// @Success 200 {object} models.Submission
+// @Router /submissions/validate [post]
 func (sc *SubmissionController) ValidateSubmission(c *gin.Context) {
 	var submission models.Submission
 

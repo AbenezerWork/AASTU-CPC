@@ -29,6 +29,13 @@ func NewAuthController(ur *repository.UserRepository, sr *repository.SessionRepo
 	}
 }
 
+// @Summary Signup a new user
+// @Description Create a new user account
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param user body models.User true "User details"
+// @Router /auth/signup [post]
 func (ctrl *AuthController) Signup(c *gin.Context) {
 	var user models.User
 	if err := c.ShouldBindJSON(&user); err != nil {
@@ -57,11 +64,15 @@ func (ctrl *AuthController) Signup(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "User created successfully"})
 }
 
+// @Summary Login a user
+// @Description Authenticate a user and create a session
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param credentials body models.Credentials true "Login credentials"
+// @Router /auth/login [post]
 func (ctrl *AuthController) Login(c *gin.Context) {
-	var credentials struct {
-		Username string `json:"username"`
-		Password string `json:"password"`
-	}
+	var credentials models.Credentials
 	if err := c.ShouldBindJSON(&credentials); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -112,6 +123,11 @@ func (ctrl *AuthController) Login(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Logged in"})
 }
 
+// @Summary Logout a user
+// @Description End the user's session
+// @Tags auth
+// @Produce json
+// @Router /auth/logout [post]
 func (ctrl *AuthController) Logout(c *gin.Context) {
 	session, _ := store.Get(c.Request, "session-name")
 	session.Values["authenticated"] = false
@@ -125,6 +141,13 @@ func (ctrl *AuthController) Logout(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Logged out"})
 }
 
+// @Summary Create a new user
+// @Description Create a new user with the provided JSON body
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param user body models.User true "User details"
+// @Router /users [post]
 func (ctrl *AuthController) CreateUser(c *gin.Context) {
 	var user models.User
 	if err := c.ShouldBindJSON(&user); err != nil {
@@ -153,6 +176,13 @@ func (ctrl *AuthController) CreateUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "User created successfully"})
 }
 
+// @Summary Get a user by ID
+// @Description Retrieve a user by their ID
+// @Tags users
+// @Produce json
+// @Param id path string true "User ID"
+// @Success 200 {object} models.User
+// @Router /users/{id} [get]
 func (ctrl *AuthController) GetUserByID(c *gin.Context) {
 	id := c.Param("id")
 
@@ -165,6 +195,14 @@ func (ctrl *AuthController) GetUserByID(c *gin.Context) {
 	c.JSON(http.StatusOK, user)
 }
 
+// @Summary Update a user
+// @Description Update an existing user's details
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param id path string true "User ID"
+// @Param user body models.User true "Updated user details"
+// @Router /users/{id} [put]
 func (ctrl *AuthController) UpdateUser(c *gin.Context) {
 	id, err := primitive.ObjectIDFromHex(c.Param("id"))
 	if err != nil {
@@ -187,6 +225,12 @@ func (ctrl *AuthController) UpdateUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "User updated successfully"})
 }
 
+// @Summary Delete a user
+// @Description Delete a user by their ID
+// @Tags users
+// @Produce json
+// @Param id path string true "User ID"
+// @Router /users/{id} [delete]
 func (ctrl *AuthController) DeleteUser(c *gin.Context) {
 	id, err := primitive.ObjectIDFromHex(c.Param("id"))
 	if err != nil {

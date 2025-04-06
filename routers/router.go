@@ -1,12 +1,22 @@
 package routers
 
 import (
+	_ "github.com/AbenezerWork/AASTU-CPC/docs"
+
 	"github.com/AbenezerWork/AASTU-CPC/controllers"
 	"github.com/AbenezerWork/AASTU-CPC/middleware"
 	"github.com/AbenezerWork/AASTU-CPC/repository"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
+// @title AASTU-CPC
+// @version 0.0.1
+
+// @host localhost:8080
+// @BasePath /
+// @query.collection.format multi
 func SetupRouter(articleCtrl *controllers.ArticleController, problemCtrl *controllers.ProblemController, authCtrl *controllers.AuthController, sessionRepo *repository.SessionRepository, submissionController *controllers.SubmissionController) *gin.Engine {
 	r := gin.Default()
 
@@ -47,6 +57,8 @@ func SetupRouter(articleCtrl *controllers.ArticleController, problemCtrl *contro
 		articles.PUT("/:id", articleCtrl.UpdateArticle)
 		articles.DELETE("/:id", articleCtrl.DeleteArticle)
 	}
+
+	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	return r
 }
