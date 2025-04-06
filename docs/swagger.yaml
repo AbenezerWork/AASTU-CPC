@@ -1,4 +1,3 @@
-basePath: /
 definitions:
   models.Article:
     properties:
@@ -92,19 +91,8 @@ definitions:
     - password
     - user_name
     type: object
-host: localhost:8080
 info:
-  contact:
-    email: support@swagger.io
-    name: API Support
-    url: http://www.swagger.io/support
-  description: This is a sample server todo server. You can visit the GitHub repository
-    at https://github.com/LordGhostX/swag-gin-demo
-  license:
-    name: MIT
-    url: https://opensource.org/licenses/MIT
-  title: Go + Gin Todo API
-  version: "1.0"
+  contact: {}
 paths:
   /articles/{id}:
     get:
@@ -188,7 +176,7 @@ paths:
       summary: Update an article
       tags:
       - articles
-  /auth/login:
+  /login:
     post:
       consumes:
       - application/json
@@ -206,7 +194,7 @@ paths:
       summary: Login a user
       tags:
       - auth
-  /auth/logout:
+  /logout:
     post:
       description: End the user's session
       produces:
@@ -215,25 +203,26 @@ paths:
       summary: Logout a user
       tags:
       - auth
-  /auth/signup:
-    post:
-      consumes:
-      - application/json
-      description: Create a new user account
+  /problems/{id}:
+    get:
+      description: Retrieve a problem by its ID
       parameters:
-      - description: User details
-        in: body
-        name: user
+      - description: Problem ID
+        in: path
+        name: id
         required: true
-        schema:
-          $ref: '#/definitions/models.User'
+        type: string
       produces:
       - application/json
-      responses: {}
-      summary: Signup a new user
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Problem'
+      summary: Get a problem by ID
       tags:
-      - auth
-  /problems:
+      - Problems
+  /problemsedit:
     post:
       consumes:
       - application/json
@@ -255,7 +244,7 @@ paths:
       summary: Create a new problem
       tags:
       - Problems
-  /problems/{id}:
+  /problemsedit/{id}:
     delete:
       description: Delete a problem by its ID
       parameters:
@@ -268,24 +257,6 @@ paths:
       - application/json
       responses: {}
       summary: Delete a problem
-      tags:
-      - Problems
-    get:
-      description: Retrieve a problem by its ID
-      parameters:
-      - description: Problem ID
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Problem'
-      summary: Get a problem by ID
       tags:
       - Problems
     put:
@@ -314,28 +285,24 @@ paths:
       summary: Update a problem
       tags:
       - Problems
-  /submissions/validate:
+  /signup:
     post:
       consumes:
       - application/json
-      description: Validate a user's submission for a problem
+      description: Create a new user account
       parameters:
-      - description: Submission data
+      - description: User details
         in: body
-        name: submission
+        name: user
         required: true
         schema:
-          $ref: '#/definitions/models.Submission'
+          $ref: '#/definitions/models.User'
       produces:
       - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Submission'
-      summary: Validate a submission
+      responses: {}
+      summary: Signup a new user
       tags:
-      - Submissions
+      - auth
   /users:
     post:
       consumes:
@@ -409,4 +376,26 @@ paths:
       summary: Update a user
       tags:
       - users
+  /validate-submission:
+    post:
+      consumes:
+      - application/json
+      description: Validate a user's submission for a problem
+      parameters:
+      - description: Submission data
+        in: body
+        name: submission
+        required: true
+        schema:
+          $ref: '#/definitions/models.Submission'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Submission'
+      summary: Validate a submission
+      tags:
+      - Submissions
 swagger: "2.0"

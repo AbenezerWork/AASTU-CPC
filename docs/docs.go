@@ -9,15 +9,7 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "contact": {
-            "name": "API Support",
-            "url": "http://www.swagger.io/support",
-            "email": "support@swagger.io"
-        },
-        "license": {
-            "name": "MIT",
-            "url": "https://opensource.org/licenses/MIT"
-        },
+        "contact": {},
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
@@ -147,7 +139,7 @@ const docTemplate = `{
                 "responses": {}
             }
         },
-        "/auth/login": {
+        "/login": {
             "post": {
                 "description": "Authenticate a user and create a session",
                 "consumes": [
@@ -174,7 +166,7 @@ const docTemplate = `{
                 "responses": {}
             }
         },
-        "/auth/logout": {
+        "/logout": {
             "post": {
                 "description": "End the user's session",
                 "produces": [
@@ -187,34 +179,36 @@ const docTemplate = `{
                 "responses": {}
             }
         },
-        "/auth/signup": {
-            "post": {
-                "description": "Create a new user account",
-                "consumes": [
-                    "application/json"
-                ],
+        "/problems/{id}": {
+            "get": {
+                "description": "Retrieve a problem by its ID",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "Problems"
                 ],
-                "summary": "Signup a new user",
+                "summary": "Get a problem by ID",
                 "parameters": [
                     {
-                        "description": "User details",
-                        "name": "user",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.User"
-                        }
+                        "type": "string",
+                        "description": "Problem ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Problem"
+                        }
+                    }
+                }
             }
         },
-        "/problems": {
+        "/problemsedit": {
             "post": {
                 "description": "Create a new problem in the database",
                 "consumes": [
@@ -248,34 +242,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/problems/{id}": {
-            "get": {
-                "description": "Retrieve a problem by its ID",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Problems"
-                ],
-                "summary": "Get a problem by ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Problem ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Problem"
-                        }
-                    }
-                }
-            },
+        "/problemsedit/{id}": {
             "put": {
                 "description": "Update an existing problem by its ID",
                 "consumes": [
@@ -336,9 +303,9 @@ const docTemplate = `{
                 "responses": {}
             }
         },
-        "/submissions/validate": {
+        "/signup": {
             "post": {
-                "description": "Validate a user's submission for a problem",
+                "description": "Create a new user account",
                 "consumes": [
                     "application/json"
                 ],
@@ -346,28 +313,21 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Submissions"
+                    "auth"
                 ],
-                "summary": "Validate a submission",
+                "summary": "Signup a new user",
                 "parameters": [
                     {
-                        "description": "Submission data",
-                        "name": "submission",
+                        "description": "User details",
+                        "name": "user",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Submission"
+                            "$ref": "#/definitions/models.User"
                         }
                     }
                 ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Submission"
-                        }
-                    }
-                }
+                "responses": {}
             }
         },
         "/users": {
@@ -476,6 +436,40 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {}
+            }
+        },
+        "/validate-submission": {
+            "post": {
+                "description": "Validate a user's submission for a problem",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Submissions"
+                ],
+                "summary": "Validate a submission",
+                "parameters": [
+                    {
+                        "description": "Submission data",
+                        "name": "submission",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Submission"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Submission"
+                        }
+                    }
+                }
             }
         }
     },
@@ -625,12 +619,12 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "1.0",
-	Host:             "localhost:8080",
-	BasePath:         "/",
+	Version:          "",
+	Host:             "",
+	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "Go + Gin Todo API",
-	Description:      "This is a sample server todo server. You can visit the GitHub repository at https://github.com/LordGhostX/swag-gin-demo",
+	Title:            "",
+	Description:      "",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

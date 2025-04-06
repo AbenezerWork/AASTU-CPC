@@ -35,7 +35,7 @@ func NewAuthController(ur *repository.UserRepository, sr *repository.SessionRepo
 // @Accept json
 // @Produce json
 // @Param user body models.User true "User details"
-// @Router /auth/signup [post]
+// @Router /signup [post]
 func (ctrl *AuthController) Signup(c *gin.Context) {
 	var user models.User
 	if err := c.ShouldBindJSON(&user); err != nil {
@@ -70,7 +70,7 @@ func (ctrl *AuthController) Signup(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param credentials body models.Credentials true "Login credentials"
-// @Router /auth/login [post]
+// @Router /login [post]
 func (ctrl *AuthController) Login(c *gin.Context) {
 	var credentials models.Credentials
 	if err := c.ShouldBindJSON(&credentials); err != nil {
@@ -127,7 +127,7 @@ func (ctrl *AuthController) Login(c *gin.Context) {
 // @Description End the user's session
 // @Tags auth
 // @Produce json
-// @Router /auth/logout [post]
+// @Router /logout [post]
 func (ctrl *AuthController) Logout(c *gin.Context) {
 	session, _ := store.Get(c.Request, "session-name")
 	session.Values["authenticated"] = false

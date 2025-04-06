@@ -26,7 +26,7 @@ func NewSubmissionController(sr *repository.SubmissionRepository, pr *repository
 	}
 }
 
-// ValidateSubmission handles POST /submissions/validate
+// ValidateSubmission handles POST /validate-submission
 // @Summary Validate a submission
 // @Description Validate a user's submission for a problem
 // @Tags Submissions
@@ -34,7 +34,7 @@ func NewSubmissionController(sr *repository.SubmissionRepository, pr *repository
 // @Produce json
 // @Param submission body models.Submission true "Submission data"
 // @Success 200 {object} models.Submission
-// @Router /submissions/validate [post]
+// @Router /validate-submission [post]
 func (sc *SubmissionController) ValidateSubmission(c *gin.Context) {
 	var submission models.Submission
 

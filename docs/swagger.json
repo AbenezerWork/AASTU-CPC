@@ -1,21 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is a sample server todo server. You can visit the GitHub repository at https://github.com/LordGhostX/swag-gin-demo",
-        "title": "Go + Gin Todo API",
-        "contact": {
-            "name": "API Support",
-            "url": "http://www.swagger.io/support",
-            "email": "support@swagger.io"
-        },
-        "license": {
-            "name": "MIT",
-            "url": "https://opensource.org/licenses/MIT"
-        },
-        "version": "1.0"
+        "contact": {}
     },
-    "host": "localhost:8080",
-    "basePath": "/",
     "paths": {
         "/articles/{id}": {
             "get": {
@@ -141,7 +128,7 @@
                 "responses": {}
             }
         },
-        "/auth/login": {
+        "/login": {
             "post": {
                 "description": "Authenticate a user and create a session",
                 "consumes": [
@@ -168,7 +155,7 @@
                 "responses": {}
             }
         },
-        "/auth/logout": {
+        "/logout": {
             "post": {
                 "description": "End the user's session",
                 "produces": [
@@ -181,34 +168,36 @@
                 "responses": {}
             }
         },
-        "/auth/signup": {
-            "post": {
-                "description": "Create a new user account",
-                "consumes": [
-                    "application/json"
-                ],
+        "/problems/{id}": {
+            "get": {
+                "description": "Retrieve a problem by its ID",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "Problems"
                 ],
-                "summary": "Signup a new user",
+                "summary": "Get a problem by ID",
                 "parameters": [
                     {
-                        "description": "User details",
-                        "name": "user",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.User"
-                        }
+                        "type": "string",
+                        "description": "Problem ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Problem"
+                        }
+                    }
+                }
             }
         },
-        "/problems": {
+        "/problemsedit": {
             "post": {
                 "description": "Create a new problem in the database",
                 "consumes": [
@@ -242,34 +231,7 @@
                 }
             }
         },
-        "/problems/{id}": {
-            "get": {
-                "description": "Retrieve a problem by its ID",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Problems"
-                ],
-                "summary": "Get a problem by ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Problem ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Problem"
-                        }
-                    }
-                }
-            },
+        "/problemsedit/{id}": {
             "put": {
                 "description": "Update an existing problem by its ID",
                 "consumes": [
@@ -330,9 +292,9 @@
                 "responses": {}
             }
         },
-        "/submissions/validate": {
+        "/signup": {
             "post": {
-                "description": "Validate a user's submission for a problem",
+                "description": "Create a new user account",
                 "consumes": [
                     "application/json"
                 ],
@@ -340,28 +302,21 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Submissions"
+                    "auth"
                 ],
-                "summary": "Validate a submission",
+                "summary": "Signup a new user",
                 "parameters": [
                     {
-                        "description": "Submission data",
-                        "name": "submission",
+                        "description": "User details",
+                        "name": "user",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Submission"
+                            "$ref": "#/definitions/models.User"
                         }
                     }
                 ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Submission"
-                        }
-                    }
-                }
+                "responses": {}
             }
         },
         "/users": {
@@ -470,6 +425,40 @@
                     }
                 ],
                 "responses": {}
+            }
+        },
+        "/validate-submission": {
+            "post": {
+                "description": "Validate a user's submission for a problem",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Submissions"
+                ],
+                "summary": "Validate a submission",
+                "parameters": [
+                    {
+                        "description": "Submission data",
+                        "name": "submission",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Submission"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Submission"
+                        }
+                    }
+                }
             }
         }
     },
