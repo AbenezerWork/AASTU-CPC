@@ -17,12 +17,25 @@ import (
 // @host localhost:8080
 // @BasePath /
 // @query.collection.format multi
+
+// @securityDefinitions.apikey Auth
+// @in header
+// @name Set-Cookie
+// @description Authentication cookie for regular users
+
+// @securityDefinitions.apikey AdminAuth
+// @in header
+// @name Set-Cookie
+// @description Authentication cookie for admin users
+
 func SetupRouter(articleCtrl *controllers.ArticleController, problemCtrl *controllers.ProblemController, authCtrl *controllers.AuthController, sessionRepo *repository.SessionRepository, submissionController *controllers.SubmissionController) *gin.Engine {
 	r := gin.Default()
 
 	// Public routes
 	r.GET("/articles/:id", articleCtrl.GetArticleByID)
+	r.GET("/articles", articleCtrl.GetArticles)
 	r.GET("problems/:id", problemCtrl.GetProblemByID)
+	r.GET("problems", problemCtrl.GetProblems)
 
 	// Auth routes
 	r.POST("/signup", authCtrl.Signup)

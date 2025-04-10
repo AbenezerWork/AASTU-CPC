@@ -8,6 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type ArticleRepository struct {
@@ -42,8 +43,35 @@ func (r *ArticleRepository) GetByID(ctx context.Context, id primitive.ObjectID) 
 }
 
 // GetAll retrieves all articles
-func (r *ArticleRepository) GetAll(ctx context.Context) ([]models.Article, error) {
-	cursor, err := r.collection.Find(ctx, bson.M{})
+func (r *ArticleRepository) GetAll(ctx context.Context, page int, limit int, search string, sort string) ([]models.Article, error) {
+	skip := (page - 1) * limit
+
+	// Build the filter for search
+	filter := bson.M{}
+	if search != "" {
+		filter = bson.M{
+			"$or": []bson.M{
+				{"title": bson.M{"$regex": search, "$options": "i"}},
+				{"content": bson.M{"$regex": search, "$options": "i"}},
+				{"tags": bson.M{"$regex": search, "$options": "i"}},
+			},
+		}
+	}
+
+	// Build the sort options
+	opts := options.Find()
+	if sort != "" {
+		if sort[0] == '-' {
+			opts.SetSort(bson.D{{Key: sort[1:], Value: -1}})
+		} else {
+			opts.SetSort(bson.D{{Key: sort, Value: 1}})
+		}
+	}
+
+	opts.SetSkip(int64(skip))
+	opts.SetLimit(int64(limit))
+
+	cursor, err := r.collection.Find(ctx, filter, opts)
 	if err != nil {
 		return nil, err
 	}
@@ -53,6 +81,7 @@ func (r *ArticleRepository) GetAll(ctx context.Context) ([]models.Article, error
 	if err := cursor.All(ctx, &articles); err != nil {
 		return nil, err
 	}
+
 	return articles, nil
 }
 

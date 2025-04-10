@@ -94,6 +94,38 @@ definitions:
 info:
   contact: {}
 paths:
+  /articles:
+    get:
+      description: Retrieve all articles with pagination filters search and sort
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Number of items per page
+        in: query
+        name: limit
+        type: integer
+      - description: Search query
+        in: query
+        name: search
+        type: string
+      - description: Sort order
+        in: query
+        name: sort
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Article'
+            type: array
+      summary: Get all articles
+      tags:
+      - articles
   /articles/{id}:
     get:
       description: Retrieve a single article by its ID
@@ -132,6 +164,12 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.Article'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - Auth: []
       summary: Create a new article
       tags:
       - articles
@@ -146,7 +184,17 @@ paths:
         type: string
       produces:
       - application/json
-      responses: {}
+      responses:
+        "200":
+          description: Article deleted successfully
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - Auth: []
       summary: Delete an article
       tags:
       - articles
@@ -173,6 +221,12 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.Article'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - Auth: []
       summary: Update an article
       tags:
       - articles
@@ -203,6 +257,46 @@ paths:
       summary: Logout a user
       tags:
       - auth
+  /problems:
+    get:
+      description: Retrieve all problems with pagination filters search and sort
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Number of items per page
+        in: query
+        name: limit
+        type: integer
+      - description: Search query
+        in: query
+        name: search
+        type: string
+      - description: Sort order
+        in: query
+        name: sort
+        type: string
+      - description: Maximum problem rating
+        in: query
+        name: maxRating
+        type: integer
+      - description: Minimum problem rating
+        in: query
+        name: minRating
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Problem'
+            type: array
+      summary: Get all problems
+      tags:
+      - Problems
   /problems/{id}:
     get:
       description: Retrieve a problem by its ID
@@ -226,7 +320,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: Create a new problem in the database
+      description: 'Create a new problem in the database NOTE: Don''t enter the id'
       parameters:
       - description: Problem data
         in: body
@@ -241,6 +335,12 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.Problem'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - Auth: []
       summary: Create a new problem
       tags:
       - Problems
@@ -255,14 +355,24 @@ paths:
         type: string
       produces:
       - application/json
-      responses: {}
+      responses:
+        "200":
+          description: Problem deleted successfully
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - Auth: []
       summary: Delete a problem
       tags:
       - Problems
     put:
       consumes:
       - application/json
-      description: Update an existing problem by its ID
+      description: 'Update an existing problem by its ID NOTE: Don''t update the id'
       parameters:
       - description: Problem ID
         in: path
@@ -282,6 +392,12 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.Problem'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - Auth: []
       summary: Update a problem
       tags:
       - Problems
@@ -317,7 +433,17 @@ paths:
           $ref: '#/definitions/models.User'
       produces:
       - application/json
-      responses: {}
+      responses:
+        "200":
+          description: User created successfully
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - AdminAuth: []
       summary: Create a new user
       tags:
       - users
@@ -332,7 +458,17 @@ paths:
         type: string
       produces:
       - application/json
-      responses: {}
+      responses:
+        "200":
+          description: User deleted successfully
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - AdminAuth: []
       summary: Delete a user
       tags:
       - users
@@ -351,6 +487,12 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.User'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - AdminAuth: []
       summary: Get a user by ID
       tags:
       - users
@@ -372,7 +514,17 @@ paths:
           $ref: '#/definitions/models.User'
       produces:
       - application/json
-      responses: {}
+      responses:
+        "200":
+          description: User updated successfully
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - AdminAuth: []
       summary: Update a user
       tags:
       - users
@@ -395,6 +547,12 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.Submission'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - Auth: []
       summary: Validate a submission
       tags:
       - Submissions

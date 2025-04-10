@@ -15,6 +15,55 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/articles": {
+            "get": {
+                "description": "Retrieve all articles with pagination filters search and sort",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "articles"
+                ],
+                "summary": "Get all articles",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of items per page",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search query",
+                        "name": "search",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort order",
+                        "name": "sort",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Article"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/articles/{id}": {
             "get": {
                 "description": "Retrieve a single article by its ID",
@@ -46,6 +95,11 @@ const docTemplate = `{
         },
         "/articlesedit": {
             "post": {
+                "security": [
+                    {
+                        "Auth": []
+                    }
+                ],
                 "description": "Create a new article with the provided JSON body",
                 "consumes": [
                     "application/json"
@@ -74,12 +128,23 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/models.Article"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             }
         },
         "/articlesedit/{id}": {
             "put": {
+                "security": [
+                    {
+                        "Auth": []
+                    }
+                ],
                 "description": "Update an existing article by its ID",
                 "consumes": [
                     "application/json"
@@ -115,10 +180,21 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/models.Article"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Auth": []
+                    }
+                ],
                 "description": "Delete an article by its ID",
                 "produces": [
                     "application/json"
@@ -136,7 +212,20 @@ const docTemplate = `{
                         "required": true
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "Article deleted successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
             }
         },
         "/login": {
@@ -179,6 +268,67 @@ const docTemplate = `{
                 "responses": {}
             }
         },
+        "/problems": {
+            "get": {
+                "description": "Retrieve all problems with pagination filters search and sort",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Problems"
+                ],
+                "summary": "Get all problems",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of items per page",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search query",
+                        "name": "search",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort order",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Maximum problem rating",
+                        "name": "maxRating",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Minimum problem rating",
+                        "name": "minRating",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Problem"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/problems/{id}": {
             "get": {
                 "description": "Retrieve a problem by its ID",
@@ -210,7 +360,12 @@ const docTemplate = `{
         },
         "/problemsedit": {
             "post": {
-                "description": "Create a new problem in the database",
+                "security": [
+                    {
+                        "Auth": []
+                    }
+                ],
+                "description": "Create a new problem in the database NOTE: Don't enter the id",
                 "consumes": [
                     "application/json"
                 ],
@@ -238,13 +393,24 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/models.Problem"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             }
         },
         "/problemsedit/{id}": {
             "put": {
-                "description": "Update an existing problem by its ID",
+                "security": [
+                    {
+                        "Auth": []
+                    }
+                ],
+                "description": "Update an existing problem by its ID NOTE: Don't update the id",
                 "consumes": [
                     "application/json"
                 ],
@@ -279,10 +445,21 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/models.Problem"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Auth": []
+                    }
+                ],
                 "description": "Delete a problem by its ID",
                 "produces": [
                     "application/json"
@@ -300,7 +477,20 @@ const docTemplate = `{
                         "required": true
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "Problem deleted successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
             }
         },
         "/signup": {
@@ -332,6 +522,11 @@ const docTemplate = `{
         },
         "/users": {
             "post": {
+                "security": [
+                    {
+                        "AdminAuth": []
+                    }
+                ],
                 "description": "Create a new user with the provided JSON body",
                 "consumes": [
                     "application/json"
@@ -354,11 +549,29 @@ const docTemplate = `{
                         }
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "User created successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
             }
         },
         "/users/{id}": {
             "get": {
+                "security": [
+                    {
+                        "AdminAuth": []
+                    }
+                ],
                 "description": "Retrieve a user by their ID",
                 "produces": [
                     "application/json"
@@ -382,10 +595,21 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/models.User"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "AdminAuth": []
+                    }
+                ],
                 "description": "Update an existing user's details",
                 "consumes": [
                     "application/json"
@@ -415,9 +639,27 @@ const docTemplate = `{
                         }
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "User updated successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
             },
             "delete": {
+                "security": [
+                    {
+                        "AdminAuth": []
+                    }
+                ],
                 "description": "Delete a user by their ID",
                 "produces": [
                     "application/json"
@@ -435,11 +677,29 @@ const docTemplate = `{
                         "required": true
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "User deleted successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
             }
         },
         "/validate-submission": {
             "post": {
+                "security": [
+                    {
+                        "Auth": []
+                    }
+                ],
                 "description": "Validate a user's submission for a problem",
                 "consumes": [
                     "application/json"
@@ -467,6 +727,12 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/models.Submission"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }

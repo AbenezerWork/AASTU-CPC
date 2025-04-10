@@ -146,7 +146,10 @@ func (ctrl *AuthController) Logout(c *gin.Context) {
 // @Tags users
 // @Accept json
 // @Produce json
+// @Security AdminAuth
 // @Param user body models.User true "User details"
+// @Success 200 {object} string "User created successfully"
+// @Failure 401 {object} string "Unauthorized"
 // @Router /users [post]
 func (ctrl *AuthController) CreateUser(c *gin.Context) {
 	var user models.User
@@ -180,8 +183,10 @@ func (ctrl *AuthController) CreateUser(c *gin.Context) {
 // @Description Retrieve a user by their ID
 // @Tags users
 // @Produce json
+// @Security AdminAuth
 // @Param id path string true "User ID"
 // @Success 200 {object} models.User
+// @Failure 401 {object} string "Unauthorized"
 // @Router /users/{id} [get]
 func (ctrl *AuthController) GetUserByID(c *gin.Context) {
 	id := c.Param("id")
@@ -200,8 +205,11 @@ func (ctrl *AuthController) GetUserByID(c *gin.Context) {
 // @Tags users
 // @Accept json
 // @Produce json
+// @Security AdminAuth
 // @Param id path string true "User ID"
 // @Param user body models.User true "Updated user details"
+// @Success 200 {object} string "User updated successfully"
+// @Failure 401 {object} string "Unauthorized"
 // @Router /users/{id} [put]
 func (ctrl *AuthController) UpdateUser(c *gin.Context) {
 	id, err := primitive.ObjectIDFromHex(c.Param("id"))
@@ -229,7 +237,10 @@ func (ctrl *AuthController) UpdateUser(c *gin.Context) {
 // @Description Delete a user by their ID
 // @Tags users
 // @Produce json
+// @Security AdminAuth
 // @Param id path string true "User ID"
+// @Success 200 {object} string "User deleted successfully"
+// @Failure 401 {object} string "Unauthorized"
 // @Router /users/{id} [delete]
 func (ctrl *AuthController) DeleteUser(c *gin.Context) {
 	id, err := primitive.ObjectIDFromHex(c.Param("id"))

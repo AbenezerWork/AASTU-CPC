@@ -29,7 +29,7 @@ type Problem struct {
 	Title            string             `bson:"title" json:"title"`
 	ProblemStatement string             `bson:"problem_statement" json:"problem_statement"`
 	Source           string             `bson:"source" json:"source"`
-	Difficulty       string             `bson:"difficulty" json:"difficulty"`
+	Difficulty       int                `bson:"difficulty" json:"difficulty"`
 	ContestID        string             `bson:"contest_id" json:"contest_id"`
 	Index            string             `json:"index"`
 	Tags             []string           `bson:"tags" json:"tags"`

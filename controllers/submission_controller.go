@@ -32,8 +32,10 @@ func NewSubmissionController(sr *repository.SubmissionRepository, pr *repository
 // @Tags Submissions
 // @Accept json
 // @Produce json
+// @Security Auth
 // @Param submission body models.Submission true "Submission data"
 // @Success 200 {object} models.Submission
+// @Failure 401 {object} string "Unauthorized"
 // @Router /validate-submission [post]
 func (sc *SubmissionController) ValidateSubmission(c *gin.Context) {
 	var submission models.Submission
